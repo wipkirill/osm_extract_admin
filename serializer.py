@@ -4,6 +4,8 @@ import shapely.wkb as wkblib
 
 from exceptions import RuntimeError
 
+# This tools are used to serialize hierarchy to files
+
 class Writer(object):
     def __call__(self, self_id, parent_id, path, data):
         raise NotImplementedError('__call__ not implemented')

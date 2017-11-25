@@ -1,6 +1,6 @@
 # OSM admin boundaries extractor demo project
 
-This project is inspired by OSM community and such tools as Mapzen Borders(https://mapzen.com/data/borders/), 
+This project is inspired by OSM community(see http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative) and such tools as Mapzen Borders(https://mapzen.com/data/borders/), 
 Postgis geometry simplification https://strk.kbt.io/blog/tag/postgis/ and many others. It is aimed to extract and
 simplify borders of multiple administrative levels from OSM data. 
 
@@ -34,3 +34,10 @@ CREATE DATABASE geodb
 ```
 python build_areas.py --filename=planet-latest_osm_admin_2-6.osm.pbf --max_level=2  --psql="host=localhost dbname=geodb user=<user> password=<pswd>"
 ```
+
+## Hardware limits
+
+Main goal was to extract admin boundaries from all countries. This includes national borders, states, districts and subdistricts.
+It was tested on a 20GB RAM node, 10 cores. 
+
+

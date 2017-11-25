@@ -96,10 +96,11 @@ if __name__ == '__main__':
     parser.add_argument('--border_column', default=None, dest='border_column', required=False,
                         help='border column')
     args = parser.parse_args()
-
+    # Initialize db and tables
     geodb = Geodb(args.psql)
 
     id_to_props = defaultdict(lambda: defaultdict())
+    # Run pbf file processing to fill db with geometries
     handler = FileStatsHandler()
     handler.apply_file(args.filename, locations=True, idx=args.index_type)
 
@@ -109,22 +110,26 @@ if __name__ == '__main__':
     print("Areas: %d" % handler.areas)
     min_area = 1000000000
     try:
+        # Build hierarchy of admin levels in db
         geodb.build(max_overlap_ratio=0.8, min_area_ratio=1.5)
+        # Cut borders(optional) since osm data contains water 
         if args.border_table and args.border_column:
             print "Cutting border..."
             geodb.cut_border(args.border_table, args.border_column, 0.01, min_area, args.max_level, threads=args.threads)
             print "Done cutting border"
-
+        # Some custom processing of borders, see details at each function
         geodb.fix_custom()
         geodb.set_is_alone()
         geodb.fill_gaps()
         geodb.filter(max_level=args.max_level, area_in_meters_sqr=min_area)
         geodb.fix_levels()
         geodb.blow_up_geoms(0.001, min_area)
+        # Simplify geometries, inspired by https://strk.kbt.io/blog/tag/postgis/
 
         #geodb.simplify_parallel_iterative(epsilon=[[0.2, 1.25], [0.0001, 4], [0.0001, 4]],
         #                                  max_points=[15000, 13000, 13000],
         #                                  max_level=args.max_level, threads=args.threads)
+        # Flush results to a local folder 
         writer = SimpleWriter('admin_areas_serialized')
         serializer = Serializer(writer)
         for geom_props in geodb.stream_topo_order(max_level=args.max_level):
@@ -135,7 +140,6 @@ if __name__ == '__main__':
             geom_props.update(id_to_props[self_id])
             serializer.write(self_id, parent_id, geom_props)
 
-        #geodb.destroy()
     except Exception as e:
         logging.error(e)
         geodb.cancel_backend()

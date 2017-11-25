@@ -5,7 +5,7 @@ import argparse
 import os.path
 import subprocess
 
-
+# Process & import admin boundaries with osmosis. Install http://wiki.openstreetmap.org/wiki/Osmosis
 # Arguments & help
 
 ap = argparse.ArgumentParser(description='Process OSM administrative ' +
@@ -18,8 +18,6 @@ ap.add_argument(dest='osm_input', metavar='planet.osm.pbf',
                 help='An OpenStreetMap PBF file to process.')
 args = ap.parse_args()
 
-
-# Process & import admin boundaries with osmosis. Install http://wiki.openstreetmap.org/wiki/Osmosis
 
 if args.min_admin_level == args.max_admin_level:
     admin_levels = args.min_admin_level;

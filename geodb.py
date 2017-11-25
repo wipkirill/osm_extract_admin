@@ -13,6 +13,7 @@ from random import randint
 from threading import RLock
 from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError
 
+# Postgres routines and SQL
 
 def new_psql_con(conn, psql, dbname):
     tokens = [t.split('=') for t in psql.split()]
