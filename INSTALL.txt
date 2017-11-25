@@ -1,0 +1,37 @@
+git clone https://github.com/osmcode/libosmium.git
+git clone https://github.com/osmcode/pyosmium.git
+sudo apt-get install build-essential libgeos++-dev libproj-dev libboost-python-dev libsparsehash-dev python-dev python-shapely
+cd pyosmium
+CXX_INCLUDE=`pwd`/../libosmium/include C_INCLUDE=`pwd`/../libosmium/include sudo python setup.py install
+CXX_INCLUDE=`pwd`/../libosmium/include C_INCLUDE=`pwd`/../libosmium/include sudo python setup.py install_lib
+
+cd -
+python build_areas.py berlin-latest.osm.pbf
+sudo pip install --upgrade autopep8
+autopep8 --in-place --aggressive --aggressive <filename>
+sudo pip install yapf
+yapf --in-place --style=pep8 <filename>
+
+geodb:
+sudo apt-get update
+sudo apt-get install libpq-dev python-dev
+sudo pip install psycopg2
+pip install futures
+
+Osmosis:
+http://wiki.openstreetmap.org/wiki/Osmosis
+
+other:
+pip install html
+
+Postgres install guide:
+http://trac.osgeo.org/postgis/wiki/UsersWikiPostGIS22UbuntuPGSQL95Apt
+
+
+Ogr2ogr:
+sudo add-apt-repository ppa:ubuntugis/ppa && sudo apt-get update
+sudo apt-get install gdal-bin
+http://svn.osgeo.org/gdal/trunk/gdal/swig/python/samples/ogr2ogr.py
+
+Topojson:
+sudo pip install git+https://github.com/osgn/python-topojson.git
